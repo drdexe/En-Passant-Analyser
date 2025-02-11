@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>En Passant Analyser: {{ username }}</title>
+{% endblock %}
+
+{% block body %}
+    <h1>En Passant Analyser</h1>
+    <p class="statheader">{{ username }} has {{ results['ratedGames'] }} rated games and {{ results['casualGames'] }} casual games, totalling {{ results['totalGames'] }} games in <a href="https://lichess.org/@/{{ username }}" target="_blank">lichess</a> database</p>
+
+    {% if results['totalOpportunities'] != 0 %}
+    <p class="stats">{{ username }} accepted en passant {{ results['totalAccepted'] }} times out of {{ results['totalOpportunities'] }} en passants presented, totalling {{ results['totalPercentage'] }}% of opportunities taken</p>
+    {% else %}
+    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
+    {% endif %}
+
+    <br>
+    <p class="stats"><u>In rated games,</u></p>
+
+    {% if results['ratedOpportunities'] != 0 %}
+    <p class="stats">{{ username }} accepted en passant {{ results['ratedAccepted'] }} times out of {{ results['ratedOpportunities'] }} en passants presented, totalling {{ results['ratedPercentage'] }}% of opportunities taken</p>
+    {% else %}
+    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
+    {% endif %}
+
+    <br>
+    <p class="stats"><u>In casual games,</u></p>
+
+    {% if results['casualOpportunities'] != 0 %}
+    <p class="stats">{{ username }} accepted en passant {{ results['casualAccepted'] }} times out of {{ results['casualOpportunities'] }} en passants presented, totalling {{ results['casualPercentage'] }}% of opportunities taken</p>
+    {% else %}
+    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
+    {% endif %}
+    
+    <hr>
+    <div>
+        <p class="statheader">{{ username }} should get {{ results['totalDeclined'] }} drops of a brick to the PIPI for declining en passant!</p>
+        <a href="https://chess-fanon.fandom.com/wiki/Brick" target="_blank">Confused? Google en passant.</a>
+        <p class="stats"><a href="{{ url_for('leaderboards') }}" target="_blank">View en passant leaderboards</a></p>
+    </div>
+    <hr>
+
+    {% if results['ratedAccepted'] != 0 %}
+    <p class="stats">{{ username }} accepted en passant in the following {{ results['ratedAccepted'] }} rated games:</p>
+    <ul>
+        {% for url in results['ratedAcceptedList'] %}
+        <li>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if results['ratedDeclined'] != 0 %}
+    <p class="stats">{{ username }} declined en passant in the following {{ results['ratedDeclined'] }} rated games:</p>
+    <ul>
+        {% for url in results['ratedDeclinedList'] %}
+        <li>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if results['casualAccepted'] != 0 %}
+    <p class="stats">{{ username }} accepted en passant in the following {{ results['casualAccepted'] }} casual games:</p>
+    <ul>
+        {% for url in results['casualAcceptedList'] %}
+        <li>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if results['casualDeclined'] != 0 %}
+    <p class="stats">{{ username }} declined en passant in the following {{ results['casualDeclined'] }} casual games:</p>
+    <ul>
+        {% for url in results['casualDeclinedList'] %}
+        <li>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

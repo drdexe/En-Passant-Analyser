@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>En Passant Leaderboards</title>
+{% endblock %}
+
+{% block body %}
+    <h1>En Passant Leaderboards</h1>
+
+    <table class="table">
+        <tr>
+            <th>Username</th>
+            <th>Opportunities</th>
+            <th>Accepted %</th>
+        </tr>
+        {% for results in percentage_results %}
+            <tr>
+                <td>{{ results[0] }}</td>
+                <td>{{ results[1] }}</td>
+                <td>{{ results[2] | round(2) }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table class="table">
+        <tr>
+            <th>Username</th>
+            <th>Games</th>
+            <th>Bricks</th>
+        </tr>
+        {% for results in declined_results %}
+            <tr>
+                <td>{{ results[0] }}</td>
+                <td>{{ results[1] }}</td>
+                <td>{{ results[2] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
