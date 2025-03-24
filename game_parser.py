@@ -2,6 +2,7 @@ import chess
 import chess.pgn
 from io import StringIO
 
+
 class Game:
     def __init__(self, pgn_string: str):
         self.pgn = pgn_string.strip()
@@ -64,8 +65,8 @@ class Game:
     def get_variant(self) -> str:
         return self.game_info['Variant']
 
-    # Getting the FEN of the board after a certain number of halfmoves, where halfmove 0 is the initial position
     def get_fen(self, halfmove_number: int) -> str:
+        """Getting the FEN of the board after a certain number of halfmoves, where halfmove 0 is the initial position"""
         self.board.set_fen(self.initial_fen)
 
         for number, move in enumerate(self.game.mainline_moves()): 
@@ -75,8 +76,8 @@ class Game:
         
         return self.board.fen()
 
-    # Getting a list of FENs of every board position, including the initial position
     def get_fen_list(self) -> list[str]:
+        """Getting a list of FENs of every board position, including the initial position"""
         self.board.set_fen(self.initial_fen)
         fen_list = [self.board.fen()]
 
@@ -87,8 +88,8 @@ class Game:
         
         return fen_list
     
-    # Getting the UCI move (e.g. e2e4) from the initial and final FENs where the move is made
     def get_uci_from_fens(self, start_fen: str, next_fen: str) -> str:
+        """Getting the UCI move (e.g. e2e4) from the initial and final FENs where the move is made"""
         self.board.set_fen(start_fen)
         start_position = self.board.copy()
 
@@ -105,8 +106,8 @@ class Game:
         
         return None
     
-    # Getting a list of possible en passant moments, as a tuple containing the halfmove number it occurs and the target square if the capture is made
     def get_possible_enpassant_list(self) -> list[tuple]:
+        """Getting a list of possible en passant moments, as a tuple containing the halfmove number it occurs and the target square if the capture is made"""
         self.board.set_fen(self.initial_fen)
         possible_enpassant_list = []
 
@@ -122,8 +123,8 @@ class Game:
 
         return possible_enpassant_list
     
-    # Reducing the list of possible en passant moments to a list where the user is presented with the opportunity to make the capture
     def get_user_enpassant_list(self, username: str, possible_enpassant_list: list[tuple]) -> list[tuple]:
+        """Reducing the list of possible en passant moments to a list where the user is presented with the opportunity to make the capture"""
         user_colour = self.get_user_colour(username)
         user_enpassant_list = []
 
@@ -136,8 +137,8 @@ class Game:
 
         return user_enpassant_list
     
-    # Getting a list of booleans indicating whether the user accepted en passant as a parallel list to the user_enpassant_list
     def is_enpassant_accepted(self, user_enpassant_list: list[tuple]) -> list[bool]:
+        """Getting a list of booleans indicating whether the user accepted en passant as a parallel list to the user_enpassant_list"""
         enpassant_accepted_list = []
 
         for element in user_enpassant_list:
@@ -162,8 +163,8 @@ class Game:
 
         return enpassant_accepted_list
     
-    # Getting a tuple of 2 lists containing the URLs in one game where the user accepted or declined en passant (since there can be multiple en passant opportunities in one game)
     def get_enpassant_move_url_lists(self, username: str, user_enpassant_list: list[tuple], enpassant_accepted_list: list[bool]) -> tuple[list]:
+        """Getting a tuple of 2 lists containing the URLs in one game where the user accepted or declined en passant (since there can be multiple en passant opportunities in one game)"""
         accepted_url_list = []
         declined_url_list = []
 

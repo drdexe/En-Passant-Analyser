@@ -9,7 +9,7 @@
     <h2>Check how many en passants you have accepted or declined on <a href="https://lichess.org" target="_blank">lichess.org</a></h2>
     <form action="{{ url_for('index') }}" method="post" target="_blank">
         <div>
-            <input type="text" id="username" name="username" placeholder="Enter your lichess.org username (case-sensitive)">
+            <input autocomplete="off" autofocus type="text" id="username" name="username" placeholder="Enter your lichess.org username (case-sensitive)">
         </div>
         <div>
             <button type="submit">CLICK HERE TO ANALYSE GAMES</button>

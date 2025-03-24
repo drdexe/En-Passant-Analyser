@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Database:
     def __init__(self, db='user_statistics.db'):
         self.conn = sqlite3.connect(db)
@@ -34,7 +35,7 @@ class Database:
             username TEXT,
             gameType TEXT,
             accepted BOOLEAN,
-            url TEXT,
+            url TEXT UNIQUE,
             FOREIGN KEY (username) REFERENCES users(username)
         )           
         ''')
@@ -59,6 +60,7 @@ class Database:
         self.conn.execute('''
         INSERT INTO user_urls (username, gameType, accepted, url)
         VALUES (?, ?, ?, ?)
+        ON CONFLICT (url) DO NOTHING;
         ''', (username, game_type, accepted, url))
         self.conn.commit()
 

@@ -1,7 +1,8 @@
 import requests
 
-# Retrieve total number of rated or casual games of user which is >= than length of user_games_list due to missing games in lichess.org database in certain time period
+
 def get_total_user_games(username: str, is_rated: bool) -> int:
+    """Retrieve total number of rated or casual games of user which is >= than length of user_games_list due to missing games in lichess.org database in certain time period"""
     url = f'https://lichess.org/api/user/{username}'
     response = requests.get(url)
 
@@ -18,8 +19,8 @@ def get_total_user_games(username: str, is_rated: bool) -> int:
         raise Exception(f'Failed to retrieve total user games for {username}, status code: {response.status_code}')
 
 
-# Retrieving all rated or casual games of a user by default, or specify only latest new_games_count number from lichess.org and returning as a list of PGN strings
 def get_user_games_list(username: str, is_rated: bool, new_games_count: int = None) -> list[str]:
+    """Retrieving all rated or casual games of a user by default, or specify only latest new_games_count number from lichess.org and returning as a list of PGN strings"""
     url = f'https://lichess.org/api/games/user/{username}?rated='
 
     url += 'true' if is_rated else 'false'
