@@ -6,8 +6,8 @@
 
 {% block body %}
     <h1>En Passant Analyser</h1>
-    <h2>Check how many en passants you have accepted or declined on <a href="https://lichess.org" target="_blank">lichess.org</a></h2>
-    <form action="{{ url_for('index') }}" method="post" target="_blank">
+    <h2>Check how many en passants you have accepted or declined on <a href="https://lichess.org" target="_blank" rel="noopener noreferrer">lichess.org</a></h2>
+    <form action="{{ url_for('index') }}" method="post" target="_blank" rel="noopener noreferrer">
         <div>
             <input autocomplete="off" autofocus type="text" id="username" name="username" placeholder="Enter your lichess.org username (case-sensitive)">
         </div>
@@ -17,6 +17,6 @@
     </form>
     <div>
         <img src="{{ url_for('static', filename='en passant explanation.png') }}">
-        <p><a href="https://en.wikipedia.org/wiki/En_passant" target="_blank">What is en passant?</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/En_passant" target="_blank" rel="noopener noreferrer">What is en passant?</a></p>
     </div>
 {% endblock %}
