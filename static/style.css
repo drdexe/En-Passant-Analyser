@@ -1,78 +1,333 @@
+/* Reset browser defaults for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Universal page structure */
 body {
-    background-color: #0369a1;
-    color: white;
-    font-family: 'Arial', sans-serif;
+  font-family: Tahoma, sans-serif;
+  background-color: #0369a1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-h1 {
-    text-align: center;
-    font-size: 75px;
-    margin-top: 50px;
-    margin-bottom: 10px;
+header {
+  font-size: clamp(1rem, 3vw, 2rem);
+  color: white;
+  margin: 1em;
+  text-align: center;
 }
 
+main {
+  background-color: rgb(199, 210, 254);
+  color: black;
+  flex: 1;
+  width: clamp(20rem, 75vw, 100rem);
+  padding: clamp(.5rem, 5%, 2rem) 0;
+  border-radius: 10px;
+}
+
+footer {
+  font-size: clamp(.75rem, 1vw, 1.25rem);
+  color: #00000075;
+  margin: 1em;
+}
+
+/* Universal styles */
 h2 {
-    text-align: center;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: normal;
+  font-size: clamp(.85rem, 2vw, 1.5rem);
+  text-align: center;
 }
 
-div {
-    text-align: center;
+ul {
+  list-style-type: none;
 }
 
-#username {
-    width: 30%;
-    margin: 50px;
-    padding: 10px;
-    border-color: black;
-    font-size: 16px;
+a {
+  color: black;
+  opacity: 75%;
+  text-decoration-style: dotted;
+}
+
+a:hover {
+  text-decoration-style: dashed;
+}
+
+a.username {
+  text-decoration: none;
+}
+
+a.username:hover {
+  text-decoration: underline;
+}
+
+/* index.html styles */
+main.index {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 1.5rem;
+}
+
+form > * {
+  font-size: clamp(.7rem, 1.5vw, 1.25rem);
+}
+
+input {
+  width: clamp(10rem, 75%, 50rem);
+  padding: .5em;
+  border: 2px solid black;
+  border-radius: 2px;
+}
+
+input:focus {
+  outline: none;
+  border-color: orange;
+}
+
+.error {
+  font-style: italic;
+  opacity: .5;
 }
 
 button {
-    background-color: yellowgreen;
-    color: white;
-    margin-bottom: 50px;
-    padding: 10px;
-    border-radius: 15px;
+  background-color: rgb(22 163 74);
+  color: white;
+  padding: 1em;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+button:hover {
+  background-color: rgb(2, 143, 54);
+}
+
+figure {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%
 }
 
 img {
-    width: 35%;
+  width: clamp(12.5rem, 50%, 30rem);
 }
 
-p.statheader {
-    text-align: center;
-    margin: 30px;
-    font-size: 30px;
-    font-weight: bold;
+figcaption {
+  padding: .25em;
 }
 
-p.stats {
-    margin: 15px;
-    font-size: 20px;
+figcaption > a {
+  font-size: clamp(.75rem, .75vw, 1rem);
+}
+ 
+/* results.html styles */
+.stats {
+  font-size: clamp(.65rem, 1vw, 1.4rem);
+  margin: 5%;
 }
 
-a:link, a:visited, a:active {
-    color: white;
+.stats > * {
+  margin: 1rem 0;
+}
+
+.game-type {
+  border-left: 3px solid rgba(0, 0, 0, .8);
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
+.game-type> :first-child {
+  width: fit-content;
+  border-bottom: 2px solid rgba(0, 0, 0, .8);
+}
+
+strong {
+  font-weight: 600;
+  opacity: .8;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, .5);
+  padding: 1rem;
+  margin: 2rem auto;
+  width: clamp(12.5rem, 75%, 75rem);
+  border: 5px outset rgba(255, 255, 255, .5);
+  border-radius: 5px;
+  box-shadow: 0 8px 6px -6px black;
+}
+
+span.bricks {
+  font-weight: 900;
+  border: 2px solid orange;
+  border-radius: 1em;
+  padding: 2px;
+}
+
+.card + h2 {
+  margin: 2rem;
+}
+
+a.leaderboards {
+  display: block;
+  text-decoration: none;
+  padding: .5em;
+  border: 2px solid black;
+}
+
+a.leaderboards:hover {
+  outline: 2px solid black;
+}
+
+hr {
+  border: 1px solid #0369a180;
+}
+
+select {
+  background-color: rgb(22 163 74);
+  color: white;
+  display: block;
+  text-align: center;
+  width: clamp(12.5rem, 50%, 50rem);
+  font-size: clamp(.75rem, 1.5vw, 1.25rem);
+  font-weight: bold;
+  padding: .5em 0;
+  margin: 1rem auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  appearance: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+blockquote {
+  font-family: Georgia, serif;
+  width: clamp(3rem, 75%, 200rem);
+  margin: auto;
+  font-size: clamp(.65rem, 1vw, 1.25rem);
+  line-height: 1.5em;
+  opacity: .75;
+  position: relative;
+}
+
+blockquote::before {
+  content: open-quote;
+  font-size: 5em;
+  position: absolute;
+  left: -1rem;
+  top: 1rem;
+  margin-left: -1rem;
+}
+
+blockquote::after {
+  content: close-quote;
+  font-size: 5em;
+  position: absolute;
+  right: -1rem;
+  bottom: 1rem;
+  margin-right: -1rem;
+}
+
+blockquote > p {
+  margin: 1em;
+  text-align: justify;
+}
+
+cite {
+  display: block;
+  text-align: right;
+}
+
+.list-container {
+  display: none;
+  background-color: rgb(22 163 74);
+  color: white;
+  padding: 1rem;
+  width: clamp(17.5rem, 75%, 50rem);
+  margin: auto;
+  border-radius: 10px;
+}
+
+.list-container > h2 {
+  margin-bottom: .5rem;
+}
+
+.list-container > ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.list-container li {
+  width: 50%;
+  margin: .25em 0;
+}
+
+.list-container a {
+  color: white;
+  opacity: 1;
+  font-size: clamp(.9rem, 1vw, 1.4rem);
+}
+
+/* leaderboards.html styles */
+main.leaderboards {
+  padding: 1rem 1.5rem;
+}
+
+main.leaderboards > h2 {
+  font-size: clamp(1rem, 2.5vw, 2rem);
+}
+
+.tables {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 1rem;
+}
+
+.leaderboard {
+  flex: 1 45%;
+  border-collapse: collapse;
 }
 
 th, td {
-    border: 1px solid;
-    padding: 8px;
-    text-align: left;
-}
-
-.table {
-    margin-top: 50px;
-    margin-left: 10px;
-    margin-right: 10px;
-    border-collapse: collapse;
-    width: 45%;
-    float: left;
+  border: 1px solid;
+  padding: 8px;
+  font-size: clamp(.6rem, 1.5vw, 1.5rem);
 }
 
 th {
-    background-color: darkcyan;
+  text-align: left;
+  background-color: #009b9b;
+  height: 4em;
+}
+
+th.username {
+  width: 50%;
+}
+
+th.username + th {
+  width: 25%;
 }

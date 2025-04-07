@@ -1,39 +1,47 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>En Passant Leaderboards</title>
+  <title>En Passant Leaderboards</title>
 {% endblock %}
 
-{% block body %}
-    <h1>En Passant Leaderboards</h1>
+{% block main %}
+  <main class="leaderboards">
+    <h2>Leaderboards</h2>
 
-    <table class="table">
+    <div class="tables">
+      <table class="leaderboard">
         <tr>
-            <th>Username</th>
-            <th>Opportunities</th>
-            <th>Accepted %</th>
+          <th>Username</th>
+          <th>Opportunities</th>
+          <th>Accepted %</th>
         </tr>
         {% for results in percentage_results %}
-            <tr>
-                <td>{{ results[0] }}</td>
-                <td>{{ results[1] }}</td>
-                <td>{{ results[2] | round(2) }}</td>
-            </tr>
+          <tr>
+            <td>{{ loop.index }}.
+              <a class="username" href="{{ url_for('results', username=results[0]) }}">{{ results[0] }}</a>
+            </td>
+            <td>{{ results[1] }}</td>
+            <td>{{ results[2] | round(2) }}</td>
+          </tr>
         {% endfor %}
-    </table>
+      </table>
 
-    <table class="table">
+      <table class="leaderboard">
         <tr>
-            <th>Username</th>
-            <th>Games</th>
-            <th>Bricks</th>
+          <th>Username</th>
+          <th>Games</th>
+          <th>Bricks</th>
         </tr>
         {% for results in declined_results %}
-            <tr>
-                <td>{{ results[0] }}</td>
-                <td>{{ results[1] }}</td>
-                <td>{{ results[2] }}</td>
-            </tr>
+          <tr>
+            <td>{{ loop.index }}.
+              <a class="username" href="{{ url_for('results', username=results[0]) }}">{{ results[0] }}</a>
+            </td>
+            <td>{{ results[1] }}</td>
+            <td>{{ results[2] }}</td>
+          </tr>
         {% endfor %}
-    </table>
+      </table>
+    </div>
+  </main>
 {% endblock %}

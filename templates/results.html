@@ -1,86 +1,116 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>En Passant Analyser: {{ username }}</title>
+  <title>En Passant Analyser: {{ username }}</title>
+  <script>
+    function showList(selectedList) {
+      // Hide all lists
+      document.querySelectorAll('.list-container').forEach((list) => {
+        list.style.display = 'none';
+      });
+
+      const blockquote = document.getElementById('quote');
+
+      if (selectedList === 'quote') {
+        blockquote.style.display = 'block';
+      } else {
+        blockquote.style.display = 'none';
+
+        // Show selected list
+        const selectedElement = document.getElementById(selectedList);
+        if (selectedElement) {
+          selectedElement.style.display = 'block';
+        }
+      }
+    }
+  </script>
 {% endblock %}
 
-{% block body %}
-    <h1>En Passant Analyser</h1>
-    <p class="statheader">{{ username }} has {{ results['ratedGames'] }} rated games and {{ results['casualGames'] }} casual games, totalling {{ results['totalGames'] }} games in <a href="https://lichess.org/@/{{ username }}" target="_blank" rel="noopener noreferrer">lichess</a> database</p>
+{% block main %}
+  <main class="results">
+    <h2>
+      <a class="username" href="https://lichess.org/@/{{ username }}" target="_blank" rel="noopener noreferrer">{{ username }}</a>
+      has {{ results['ratedGames'] }} rated games and {{ results['casualGames'] }} casual games, totalling {{ results['totalGames'] }} games in the lichess database 
+    </h2>
 
-    {% if results['totalOpportunities'] != 0 %}
-    <p class="stats">{{ username }} accepted en passant {{ results['totalAccepted'] }} times out of {{ results['totalOpportunities'] }} en passants presented, totalling {{ results['totalPercentage'] }}% of opportunities taken</p>
-    {% else %}
-    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
-    {% endif %}
+    <section class="stats">
+      {% if results['totalOpportunities'] != 0 %}
+        <p>{{ username }} accepted en passant <strong>{{ results['totalAccepted'] }}</strong> times out of <strong>{{ results['totalOpportunities'] }}</strong> en passants presented, totalling <strong>{{ results['totalPercentage'] }}%</strong> of opportunities taken</p>
+      {% else %}
+        <p>{{ username }} has never been presented with an opportunity to en passant!</p>
+      {% endif %}
 
-    <br>
-    <p class="stats"><u>In rated games,</u></p>
+      {% for game_type in  ['rated', 'casual'] %}
+        <div class="game-type">
+          <p>In <strong>{{ game_type }}</strong> games,</p>
+          {% if results[game_type + 'Opportunities'] != 0 %}
+            <p>{{ username }} accepted en passant <strong>{{ results[game_type + 'Accepted'] }}</strong> times out of <strong>{{ results[game_type + 'Opportunities'] }}</strong> en passants presented, totalling <strong>{{ results[game_type + 'Percentage'] }}%</strong> of opportunities taken</p>
+          {% else %}
+            <p>{{ username }} has never been presented with an opportunity to en passant!</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </section>
 
-    {% if results['ratedOpportunities'] != 0 %}
-    <p class="stats">{{ username }} accepted en passant {{ results['ratedAccepted'] }} times out of {{ results['ratedOpportunities'] }} en passants presented, totalling {{ results['ratedPercentage'] }}% of opportunities taken</p>
-    {% else %}
-    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
-    {% endif %}
+    <section class="card">
+      <h2>{{ username }} deserves
+        <span class="bricks">{{ results['totalDeclined'] }}</span>
+        drops of a brick to the PIPI for declining En Passant!
+      </h2>
+    </section>
 
-    <br>
-    <p class="stats"><u>In casual games,</u></p>
+    <h2>
+      <a class="leaderboards" href="{{ url_for('leaderboards') }}" target="_blank">View Leaderboards</a>
+    </h2>
 
-    {% if results['casualOpportunities'] != 0 %}
-    <p class="stats">{{ username }} accepted en passant {{ results['casualAccepted'] }} times out of {{ results['casualOpportunities'] }} en passants presented, totalling {{ results['casualPercentage'] }}% of opportunities taken</p>
-    {% else %}
-    <p class="stats">{{ username }} has never been presented with an opportunity to en passant!</p>
-    {% endif %}
+    <hr>
     
-    <hr>
-    <div>
-        <p class="statheader">{{ username }} should get {{ results['totalDeclined'] }} drops of a brick to the PIPI for declining en passant!</p>
-        <a href="https://chess-fanon.fandom.com/wiki/Brick" target="_blank" rel="noopener noreferrer">Confused? Google en passant.</a>
-        <p class="stats"><a href="{{ url_for('leaderboards') }}" target="_blank" rel="noopener noreferrer">View en passant leaderboards</a></p>
-    </div>
-    <hr>
-
-    {% if results['ratedAccepted'] != 0 %}
-    <p class="stats">{{ username }} accepted en passant in the following {{ results['ratedAccepted'] }} rated games:</p>
-    <ul>
-        {% for url in results['ratedAcceptedList'] %}
-        <li>
-            <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+    {% if results['totalOpportunities'] != 0 %}
+      <select onchange="showList(this.value)">
+        <option value="quote">-- VIEW GAMES --</option>
+        {% if results['ratedAccepted'] != 0 %}
+          <option value="rated-accepted">Rated Games: Accepted</option>
+        {% endif %}
+        {% if results['ratedDeclined'] != 0 %}
+          <option value="rated-declined">Rated Games: Declined</option>
+        {% endif %}
+        {% if results['casualAccepted'] != 0 %}
+          <option value="casual-accepted">Casual Games: Accepted</option>
+        {% endif %}
+        {% if results['casualDeclined'] != 0 %}
+          <option value="casual-declined">Casual Games: Declined</option>
+        {% endif %}
+      </select>
     {% endif %}
 
-    {% if results['ratedDeclined'] != 0 %}
-    <p class="stats">{{ username }} declined en passant in the following {{ results['ratedDeclined'] }} rated games:</p>
-    <ul>
-        {% for url in results['ratedDeclinedList'] %}
-        <li>
-            <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <blockquote id="quote" cite="https://anarchychess.fandom.com/wiki/Tigran_Petrosian">
+      <p>Are you kidding ??? What the **** are you talking about man ? You are a biggest looser i ever seen in my life ! You was doing PIPI in your pampers when i was beating players much more stronger then you! You are not proffesional, because proffesionals knew how to lose and congratulate opponents, you are like a girl crying after i beat you! Be brave, be honest to yourself and stop this trush talkings!!! Everybody know that i am very good blitz player, i can win anyone in the world in single game! And "w"esley "s"o is nobody for me, just a player who are crying every single time when loosing, ( remember what you say about Firouzja ) !!! Stop playing with my name, i deserve to have a good name during whole my chess carrier, I am Officially inviting you to OTB blitz match with the Prize fund! Both of us will invest 5000$ and winner takes it all!</p>
+      <p>I suggest all other people who's intrested in this situation, just take a look at my results in 2016 and 2017 Blitz World championships, and that should be enough... No need to listen for every crying babe, Tigran Petrosyan is always play Fair ! And if someone will continue Officially talk about me like that, we will meet in Court! God bless with true! True will never die ! Liers will kicked off...</p>
+      <cite>&mdash;GM Tigran L. Petrosian</cite>
+    </blockquote>
 
-    {% if results['casualAccepted'] != 0 %}
-    <p class="stats">{{ username }} accepted en passant in the following {{ results['casualAccepted'] }} casual games:</p>
-    <ul>
-        {% for url in results['casualAcceptedList'] %}
-        <li>
-            <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    {% for game_type, status, list_key in [
+      ('rated', 'accepted', 'ratedAcceptedList'),
+      ('rated', 'declined', 'ratedDeclinedList'),
+      ('casual', 'accepted', 'casualAcceptedList'),
+      ('casual', 'declined', 'casualDeclinedList')
+    ] %}
+      <div id="{{ game_type }}-{{ status }}" class="list-container">
+        <h2>
+          {{ results[list_key] | length }}
+          {% if status == 'accepted' %}
+            Trophies
+          {% else %}
+            Bricks
+          {% endif %}
+        </h2>
 
-    {% if results['casualDeclined'] != 0 %}
-    <p class="stats">{{ username }} declined en passant in the following {{ results['casualDeclined'] }} casual games:</p>
-    <ul>
-        {% for url in results['casualDeclinedList'] %}
-        <li>
-            <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        <ul>
+          {% for url, opponent in results[list_key] %}
+            <li><a class="username" href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ opponent }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </main>
 {% endblock %}

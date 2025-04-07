@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>En Passant Analyser</title>
+  <title>En Passant Analyser</title>
 {% endblock %}
 
-{% block body %}
-    <h1>En Passant Analyser</h1>
-    <h2>Check how many en passants you have accepted or declined on <a href="https://lichess.org" target="_blank" rel="noopener noreferrer">lichess.org</a></h2>
-    <form action="{{ url_for('index') }}" method="post" target="_blank" rel="noopener noreferrer">
-        <div>
-            <input autocomplete="off" autofocus type="text" id="username" name="username" placeholder="Enter your lichess.org username (case-sensitive)">
-        </div>
-        <div>
-            <button type="submit">CLICK HERE TO ANALYSE GAMES</button>
-        </div>
+{% block main %}
+  <main class="index">
+    <h2>Check how many En Passants you have accepted or declined on
+      <a href="https://lichess.org" target="_blank" rel="noopener noreferrer">lichess.org</a>
+    </h2>
+
+    <form action="{{ url_for('index') }}" method="post">
+      <p>Enter lichess username:</p>
+      <input autocomplete="off" autofocus type="text" id="username" name="username" placeholder="Username" spellcheck="false">
+      
+      {% if error %}
+        <p class="error">Error: {{ error }}</p>
+      {% endif %}
+
+      <button type="submit">CLICK HERE TO ANALYSE GAMES</button>
     </form>
-    <div>
-        <img src="{{ url_for('static', filename='en passant explanation.png') }}" alt="En Passant Explanation">
-        <p><a href="https://en.wikipedia.org/wiki/En_passant" target="_blank" rel="noopener noreferrer">What is en passant?</a></p>
-    </div>
+
+    <figure>
+      <img src="{{ url_for('static', filename='en-passant-animation.gif') }}" alt="En Passant Animation">
+      <figcaption>
+        <a href="https://google.com/search?q=En+Passant" target="_blank" rel="noopener noreferrer">Google En Passant.</a>
+      </figcaption>
+    </figure>
+  </main>
 {% endblock %}
