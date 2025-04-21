@@ -8,7 +8,7 @@ from utils import retrieve_games, analyse_games, update_database, get_leaderboar
 
 
 def main():
-    """Main entry point for the application"""
+    """Main entry point for the application."""
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Run the En Passant Analyser Flask app.')
     parser.add_argument(
@@ -34,15 +34,17 @@ def create_app(db_name):
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
-        """
-        Handle the main page of the application.
+        """Handle the main page of the application.
 
-        For GET requests, renders the index page with a form for the user to input their username.
-        For POST requests, retrieves and analyses the user's games for Lichess, update their statistics in the database,
+        For GET requests, renders the index page with a form for the
+        user to input their username.
+        For POST requests, retrieves and analyses the user's games
+        for Lichess, update their statistics in the database,
         and redirects to the results page for the user.
 
         Returns:
-            Rendered HTML template for the index or a redirect to the results page.
+          Rendered HTML template for the index
+          or a redirect to the results page.
         """
         if request.method == 'POST':
             form_username = request.form.get('username')
@@ -54,14 +56,14 @@ def create_app(db_name):
 
     @app.route('/results/<username>')
     def results(username):
-        """
-        Handle the results page for a specific user.
+        """Handle the results page for a specific user.
 
-        Retrieves the user's game data from lichess.org, analyses en passant statistics,
-        and updates the database, then renders the results page.
+        Retrieves the user's game data from lichess.org
+        analyses en passant statistics and updates the database,
+        then renders the results page.
 
         Returns:
-            Rendered HTML template for the results page.
+          Rendered HTML template for the results page.
         """
         try:
             (
@@ -88,13 +90,13 @@ def create_app(db_name):
 
     @app.route('/leaderboards')
     def leaderboards():
-        """
-        Handle the leaderboards page for the application.
+        """Handle the leaderboards page for the application.
 
-        Retrieves leaderboard data for en passant statistics from database and renders leaderboards page.
+        Retrieves leaderboard data for en passant statistics from
+        the database and renders leaderboards page.
 
         Returns:
-            Rendered HTML template for the leaderboards page. 
+          Rendered HTML template for the leaderboards page. 
         """
         percentage_results, declined_results = get_leaderboards(db_name)
         return render_template(

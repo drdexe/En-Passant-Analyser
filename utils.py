@@ -4,7 +4,7 @@ from lichess_api import get_user_games, get_user_info
 
 
 def time_function(func):
-    """Record and print time taken to run a function."""
+    """Decorator to record and print time taken to run a function."""
     from time import time
 
     def wrapper(*args, **kwargs):
@@ -20,7 +20,25 @@ def time_function(func):
 
 @time_function
 def retrieve_games(db_name, form_username):
-    """Retrieve new games of case-insensitive username and returns tuple of case-sensitive username, rated and casual games number and list."""
+    """Retrieve new games for a user and return game data.
+
+    Retrieves new games for a case-insensitive username. If the user
+    exists in the database, only new games are retrieved to reduce
+    API calls. Otherwise, all games are retrieved.
+
+    Args:
+      db_name (str): The name of the SQLite database file.
+      form_username (str): The username entered by the user
+      (case-insensitive).
+
+    Returns:
+      tuple: A tuple containing:
+        - str: The case-sensitive username.
+        - int: The total number of rated games.
+        - int: The total number of casual games.
+        - list[str]: A list of new rated games (PGN strings).
+        - list[str]: A list of new casual games (PGN strings).
+    """
     db = Database(db_name)
     # Retrieve case-sensitive username and number of games
     username, num_rated, num_casual = get_user_info(form_username)
@@ -30,7 +48,7 @@ def retrieve_games(db_name, form_username):
         rated_list = get_user_games(username, is_rated=True)
         casual_list = get_user_games(username, is_rated=False)
     
-    # Retrieve only new games not in database if user exists to reduce API retrieval time
+    # Retrieve only new games not in database if user exists
     else:
         db_num_rated, db_num_casual = db.get_num_games(username)
         rated_list = []
@@ -48,13 +66,27 @@ def retrieve_games(db_name, form_username):
             )
 
     db.close()
-    # Returns username with updated games number and all games list if new user, but only new games list if existing user (empty if no new games)
     return username, num_rated, num_casual, rated_list, casual_list
 
 
 @time_function
 def analyse_games(db_name, username, rated_list, casual_list):
-    """Analyse games of username and returns dictionary of statistics and URL lists, accepts new games list from retrieve_games."""
+    """Analyse games for a user and return en passant statistics.
+
+    For new user, processes all games to calculate statistics.
+    For exisiting user, retrieves existing statistics from database
+    and processes new games, adding them together.
+
+    Args:
+      db_name (str): The name of the SQLite database file.
+      username (str): The case-sensitive username.
+      rated_list (list[str]): A list of new rated games (PGN strings).
+      casual_list (list[str]): A list of new casual games (PGN strings).
+
+    Returns:
+      dict: A dictionary containing total games,
+      en passant statistics and URL lists.
+    """
     db = Database(db_name)
 
     # Initialise values to results, assuming new user
@@ -92,7 +124,7 @@ def analyse_games(db_name, username, rated_list, casual_list):
     results['totalGames'] = results['ratedGames'] + results['casualGames']
 
     def update_results(games_list, game_type):
-        """Helper function to update results dictionary for both rated and casual games."""
+        """Helper function to update results dictionary for game_type."""
         # Iterate through games to get en passant statistics
         for pgn_string in games_list:
             game = ChessGame(pgn_string, username)
@@ -138,7 +170,19 @@ def analyse_games(db_name, username, rated_list, casual_list):
 
 @time_function
 def update_database(db_name, username, num_rated, num_casual, results):
-    """Handles all database insertion or update after retrieving and analysing games."""
+    """Update the database with new games and en passant statistics.
+
+    Args:
+      db_name (str): The name of the SQLite database file.
+      username (str): The case-sensitive username.
+      num_rated (int): The new total number of rated games.
+      num_casual (int): The new total number of casual games.
+      results (dict): A dictionary containing total games,
+      en passant statisitcs and URL lists.
+
+    Returns:
+      None
+    """
     db = Database(db_name)
 
     # Add user by inserting actual number of games
@@ -163,7 +207,22 @@ def update_database(db_name, username, num_rated, num_casual, results):
 
 @time_function
 def get_leaderboards(db_name):
-    """Queries database for sorted statistics across users."""
+    """Retrieve leaderboard data across users from the database.
+
+    Args:
+      db_name (str): The name of the SQLite database file.
+
+    Returns:
+      tuple: A tuple containing:
+        - list: Leaderboard data sorted by acceptance % containing:
+         - str: Username.
+         - int: Total opportunities to en passant.
+         - float: Accepted percentage.
+        - list: Leaderboard data sorted by declines containing:
+          - str: Username.
+          - int: Total number of games.
+          - int: Total number of opportunities declined.
+    """
     db = Database(db_name)
 
     percentage_results = db.get_percentage_leaderboard()
