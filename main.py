@@ -48,6 +48,11 @@ def create_app(db_name):
         """
         if request.method == 'POST':
             form_username = request.form.get('username')
+
+            # Check if username is blank
+            if not form_username.strip():
+                return render_template('index.html', error='Username cannot be blank!')
+            
             # Redirect to results page after getting form username
             return redirect(url_for('results', username=form_username))
         

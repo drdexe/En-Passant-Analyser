@@ -34,15 +34,15 @@ class LichessErrorHandler:
         """
         if status_code == 404:
             raise LichessErrorHandler.UserNotFoundError(
-                f'404: User {username} not found!'
+                f"404 User '{username}' not found!"
             )
         elif 500 <= status_code < 600:
             raise LichessErrorHandler.ServerError(
-                f'{status_code}: Lichess server error!'
+                f'{status_code} Lichess server error!'
             )
         else:
             raise LichessErrorHandler.APIError(
-                f'{status_code}: Failed to retrieve games for {username}!'
+                f"{status_code} Failed to retrieve games for '{username}'!"
             )
 
 
