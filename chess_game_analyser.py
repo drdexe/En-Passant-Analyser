@@ -52,7 +52,7 @@ BLACK = 'black'
 
 class ChessGame:
     """Utility class for extracting information from a chess game."""
-    def __init__(self, pgn_string: str, username: str):
+    def __init__(self, pgn_string, username):
         """Initialise the ChessGame object.
 
         Args:
@@ -97,43 +97,43 @@ class ChessGame:
             # Standard chess starting position
             self._initial_fen = chess.STARTING_FEN
 
-    def get_user(self) -> str:
+    def get_user(self):
         """Return username of player being analysed."""
         return self._user
     
-    def get_opponent(self) -> str:
+    def get_opponent(self):
         """Return opponent's username."""
         return self._opponent
 
-    def get_event(self) -> str:
+    def get_event(self):
         """Return event name of the game."""
         return self._game_info['Event']
 
-    def get_url(self) -> str:
+    def get_url(self):
         """Return base URL of the game."""
         return self._game_info['Site']
     
-    def get_date(self) -> str:
+    def get_date(self):
         """Return date of the game."""
         return self._game_info['Date']
     
-    def get_white_player(self) -> str:
+    def get_white_player(self):
         """Return username of white player."""
         return self._game_info['White']
     
-    def get_black_player(self) -> str:
+    def get_black_player(self):
         """Return username of black player."""
         return self._game_info['Black']
     
-    def get_user_color(self) -> str:
+    def get_user_color(self):
         """Return colour of user being analysed."""
         return WHITE if self._user == self.get_white_player() else BLACK
     
-    def get_result(self) -> str:
+    def get_result(self):
         """Return result of the game."""
         return self._game_info['Result']
     
-    def get_winner(self) -> str:
+    def get_winner(self):
         """Return username of winner."""
         result = self.get_result()
 
@@ -144,11 +144,11 @@ class ChessGame:
         else:
             return 'Draw'
     
-    def get_variant(self) -> str:
+    def get_variant(self):
         """Return name of chess variant."""
         return self._game_info['Variant']
     
-    def get_en_passant_urls(self) -> tuple[list]:
+    def get_en_passant_urls(self):
         """Get URLs for the en passant opportunities in the game.
 
         Identifies all en passant opportunities in the game and
